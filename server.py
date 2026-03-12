@@ -23,20 +23,11 @@ def http_error_handler(error: HttpError):
     response.status_code = error.status_code
     return response
 
-#
-# def validation_json(json_data: dict, validation_model: VALIDATION_CLASS):
-#     try:
-#         model_object = validation_model(**json_data)
-#         model_object_dict = model_object.dict(exclude_none=True)
-#     except ValidationError as err:
-#         raise HttpError(400, message=err.errors())
-#     return model_object_dict
-#
-#
+
 def get_adv(session: Session, adv_id: int):
     adv = session.get(Advertisement, adv_id)
     if adv is None:
-        raise HttpError(404, message=f"Adv with id # {adv_id} doesn't exist yet")
+        raise HttpError(404, message=f"Adv with id # {adv_id} doesn't exist")
     return adv
 
 class AdvView(MethodView):
@@ -52,10 +43,8 @@ class AdvView(MethodView):
                             })
 
     def post(self):
-        # json_data = validation_json(request.json, CreateAdv)
         json_data = request.json
         with Session() as session:
-
             adv = Advertisement(**json_data)
             session.add(adv)
             session.commit()
@@ -63,7 +52,6 @@ class AdvView(MethodView):
 
     def patch(self, adv_id: int):
         json_data = request.json
-        # json_data = validation_json(request.json, PatchAdv)
         with Session() as session:
             adv = get_adv(session, adv_id)
             for field, value in json_data.items():
