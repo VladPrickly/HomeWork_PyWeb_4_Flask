@@ -38,9 +38,9 @@ python -m venv .venv
 pip install -r requirements.txt
 
 4. Запуск приложения:
-создание БД: docker-compose up
-серверная часть: python server.py
-клиентская часть: python client.py
+- создание БД: docker-compose up
+- серверная часть: python server.py
+- клиентская часть: python client.py
 
 Приложение запустится локально на http://localhost:5000/. БД будет создана при первом запуске.
 
