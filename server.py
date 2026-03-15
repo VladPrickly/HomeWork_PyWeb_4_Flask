@@ -35,12 +35,8 @@ class AdvView(MethodView):
     def get(self, adv_id: int):
         with Session() as session:
             adv = get_adv(session, adv_id)
-            return jsonify({'id': adv_id,
-                            'title': adv.title,
-                            'description': adv.description,
-                            'created_at': adv.created_at.isoformat(),
-                            'author': adv.author
-                            })
+            return adv.to_dict()
+
 
     def post(self):
         json_data = request.json
@@ -48,7 +44,8 @@ class AdvView(MethodView):
             adv = Advertisement(**json_data)
             session.add(adv)
             session.commit()
-            return jsonify({'id': adv.id})
+            return adv.to_dict()
+
 
     def patch(self, adv_id: int):
         json_data = request.json
@@ -58,11 +55,14 @@ class AdvView(MethodView):
                 setattr(adv, field, value)
             session.add(adv)
             session.commit()
-            return jsonify({'id': adv_id,
-                            'title': adv.title,
-                            'description': adv.description,
-                            'created_at': adv.created_at.isoformat(),
-                            'author': adv.author})
+            return adv.to_dict()
+            # return jsonify({'id': adv_id,
+            #                 'title': adv.title,
+            #                 'description': adv.description,
+            #                 'created_at': adv.created_at.isoformat(),
+            #                 'owner': adv.owner
+            #                 })
+
 
     def delete(self, adv_id: int):
         with Session() as session:
